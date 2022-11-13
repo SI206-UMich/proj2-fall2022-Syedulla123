@@ -1,3 +1,7 @@
+# Your name: Sneha Yedulla
+# Your student id: 74790643
+# Your email: syedulla@umich.edu
+
 from xml.sax import parseString
 from bs4 import BeautifulSoup
 import re
