@@ -67,7 +67,29 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    pass
+    with open(os.path.join("html_files", f"listing_{listing_id}.html"), encoding="utf8") as f:
+        soup = BeautifulSoup(f, "html.parser")
+
+        heading = soup.find("h2", class_="_14i3z6h").text.lower()
+        if "private" in heading:
+            place_type = "Private Room"
+        elif "shared" in heading:
+            place_type = "Shared Room"
+        else:
+            place_type = "Entire Room"
+
+        num_bedrooms = soup.find('span', string=re.compile(r"Studio|Bedroom", re.IGNORECASE))
+        num_bedrooms = num_bedrooms.text.split()[0]
+        bedrooms = int(num_bedrooms) if num_bedrooms.isdigit() else 1
+
+        policies = soup.find("li", class_="f19phm7j dir dir-ltr")
+        policy = policies.find("span").text
+        if "pending" in policy.lower():
+            policy = "Pending"
+        elif "0" not in policy:
+            policy = "Exempt"
+
+    return policy, place_type, bedrooms
 
 
 def get_detailed_listing_database(html_file):
