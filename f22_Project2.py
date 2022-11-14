@@ -29,7 +29,18 @@ def get_listings_from_search_results(html_file):
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
-    pass
+    listings = []
+
+    with open(html_file) as f:
+        soup = BeautifulSoup(f, "html.parser")
+        titles = soup.findAll("div", class_ = "t1jojoys dir dir-ltr")
+        costs = soup.findAll("span", class_ = "_tyxjp1")
+        ids = soup.findAll("a", class_ = "ln2bl2p dir dir-ltr")
+        for title, cost, id_link in zip(titles, costs, ids):
+            id = re.findall("\d+", id_link["href"])[0]
+            listings.append((title.text, int(cost.text[1:]), id))
+
+    return listings
 
 
 def get_listing_information(listing_id):
