@@ -179,8 +179,16 @@ def extra_credit(listing_id):
     gone over their 90 day limit, else return True, indicating the lister has
     never gone over their limit.
     """
-    pass
-
+    with open(os.path.join("html_files", f"listing_{listing_id}_reviews.html"), encoding="utf8") as f:
+        soup = BeautifulSoup(f, "html.parser")
+        links = soup.findAll("li", {"theme": "[object Object]"})
+        counts = {}
+        for link in links:
+            year = link.text.split()[-1]
+            counts[year] = counts.get(year, 0) + 1
+            if counts[year] > 90:
+                return False
+    return True
 
 class TestCases(unittest.TestCase):
 
