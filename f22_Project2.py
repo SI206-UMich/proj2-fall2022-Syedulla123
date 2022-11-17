@@ -186,14 +186,20 @@ def extra_credit(listing_id):
 
     with open(os.path.join("html_files", f"listing_{listing_id}_reviews.html"), encoding="utf8") as f:
         soup = BeautifulSoup(f, "html.parser")
-        links = soup.findAll("li", {"theme": "[object Object]"})
+        links = soup.find_all('li', class_="_1f1oir5")
         counts = {}
         for link in links:
             year = link.text.split()[-1]
             counts[year] = counts.get(year, 0) + 1
             if counts[year] > 90:
                 return False
+
+    #print(counts)
     return True
+
+
+    #print(extra_credit("1944564"))
+    #print(extra_credit("16204265"))
 
 class TestCases(unittest.TestCase):
 
